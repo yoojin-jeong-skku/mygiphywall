@@ -12,7 +12,8 @@ import streamlit as st
 
 st.set_page_config(page_title="Giphy Stack", layout="centered")
 
-DATA_FILE = Path("data/gifs.json")
+BASE_DIR = Path(__file__).parent
+DATA_FILE = BASE_DIR / "gifs_db.json"
 
 
 def _ensure_protocol(url: str) -> str:
@@ -48,6 +49,11 @@ def extract_gif_id(raw_url: str) -> Optional[str]:
     return match.group(1)
 
 
+def build_thumbnail_url(gif_id: str) -> str:
+    """Use Giphy's 200px-wide rendition to keep the wall lightweight."""
+    return f"https://media.giphy.com/media/{gif_id}/200w.gif"
+
+
 def load_gifs_from_disk() -> list[dict[str, Any]]:
     if not DATA_FILE.exists():
         return []
@@ -56,6 +62,9 @@ def load_gifs_from_disk() -> list[dict[str, Any]]:
         with DATA_FILE.open("r", encoding="utf-8") as handle:
             payload = json.load(handle)
             if isinstance(payload, list):
+                for card in payload:
+                    if "thumbnail_url" not in card and card.get("gif_id"):
+                        card["thumbnail_url"] = build_thumbnail_url(card["gif_id"])
                 return payload
     except (json.JSONDecodeError, OSError):
         pass
@@ -75,6 +84,7 @@ def add_gif_to_state(gif_id: str, source_url: str) -> None:
             "uuid": uuid4().hex,
             "gif_id": gif_id,
             "embed_url": f"https://giphy.com/embed/{gif_id}",
+            "thumbnail_url": build_thumbnail_url(gif_id),
             "source_url": source_url,
         },
     )
@@ -113,11 +123,12 @@ st.markdown(
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.04);
             box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+            text-align: center;
         }
-        .giphy-card iframe {
+        .giphy-card img {
             width: 100%;
-            min-height: 320px;
-            border: none;
+            max-height: 320px;
+            object-fit: cover;
             border-radius: 16px;
         }
         button[kind="secondary"] {
@@ -151,11 +162,11 @@ if st.session_state.gifs:
             st.markdown(
                 f"""
                 <div class="giphy-card">
-                    <iframe
-                        src="{gif['embed_url']}"
-                        title="Giphy {gif['gif_id']}"
-                        allowfullscreen
-                    ></iframe>
+                    <img
+                        src="{gif['thumbnail_url']}"
+                        alt="Giphy {gif['gif_id']}"
+                        loading="lazy"
+                    />
                 </div>
                 """,
                 unsafe_allow_html=True,
