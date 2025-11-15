@@ -1,0 +1,182 @@
+/* Global override for ALL Streamlit buttons (match wall.css) */
+.stButton > button,
+button[kind="secondary"],
+button[kind="primary"],
+button {
+    color: #3207BA !important;
+    background-color: #ffffff !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+
+button[kind="secondary"] {
+    width: 100%;
+}
+
+.kermit-phrase {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #555555 !important;   /* dark grey */
+}
+
+.kermit-phrase em {
+    color: #555555 !important;   /* enforce grey even inside <em> */
+}
+
+/* Full-page dark login with floating doges: ensure it fills viewport and uses true black */
+html,
+body,
+div[data-testid="stAppViewContainer"],
+.stApp {
+    background-color: #000000 !important;
+    color: #f0f0f0 !important;
+}
+
+/* Place the login in normal flow; make the visual box transparent so no large rectangle appears. */
+.login-wrap {
+    position: relative;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.login-box {
+    position: relative;
+    z-index: 2;
+    width: min(720px, 94vw);
+    text-align: center;
+    padding-top: 10px;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: #f6f2e8;
+    margin: 0 1rem;
+    pointer-events: auto;
+}
+
+.login-title {
+    margin-top: 70px;
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: #f2b238;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6);
+    margin: 0 0 0.6rem 0;
+}
+
+.login-sub {
+    margin: 0.6rem 0 1.2rem 0;
+    font-family: Comic Sans MS, Comic Sans, cursive;
+    color: #f7e9d0;
+}
+
+/* floating doge elements */
+.float-doge {
+    position: absolute;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    opacity: 0.95;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    pointer-events: none;
+    transform: translate3d(0, 0, 0);
+    z-index: 1;
+}
+
+.fd-1 {
+    left: 6%;
+    top: 5%;
+    animation: floaty 7s ease-in-out infinite;
+}
+
+.fd-2 {
+    right: 6%;
+    top: 12%;
+    width: 110px;
+    height: 200px;
+    font-size: 3rem;
+    animation: floaty 9s ease-in-out infinite reverse;
+}
+
+.fd-3 {
+    left: 16%;
+    bottom: 6%;
+    width: 72px;
+    height: 72px;
+    font-size: 1.8rem;
+    animation: floaty 6.5s ease-in-out infinite;
+}
+
+.fd-4 {
+    right: 20%;
+    bottom: 10%;
+    width: 96px;
+    height: 96px;
+    font-size: 2.6rem;
+    animation: floaty 8.2s ease-in-out infinite reverse;
+}
+
+.doge-face {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #f7d9a8 0%, #d6b37a 40%, #b37a40 100%);
+    box-shadow: inset -8px -6px 18px rgba(0, 0, 0, 0.18), 0 6px 18px rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3b2b10;
+}
+
+@keyframes floaty {
+    0% {
+        transform: translateY(0) translateX(0) rotate(-2deg);
+    }
+    50% {
+        transform: translateY(-18px) translateX(10px) rotate(4deg);
+    }
+    100% {
+        transform: translateY(0) translateX(0) rotate(-2deg);
+    }
+}
+
+/* small responsive tweaks */
+@media (max-width: 600px) {
+    .login-title {
+        font-size: 2.2rem;
+    }
+    .float-doge {
+        display: none;
+    }
+    .login-box {
+        width: 94vw;
+    }
+}
+
+/* Style Streamlit buttons/inputs inside the login box so they are readable */
+.login-box input,
+.login-box textarea {
+    background: rgba(255, 255, 255, 0.95);
+    color: #111 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+}
+
+/* Streamlit forms may render buttons outside the login box structure, so re-apply the same rule for consistency. */
+.login-box .stButton > button,
+.login-box button[type="submit"],
+.stForm .stButton > button,
+div[role="form"] .stButton > button {
+    color: #3207BA !important;
+    background-color: #ffffff !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
